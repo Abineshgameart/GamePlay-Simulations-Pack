@@ -8,6 +8,7 @@ public class PlayerMovements : MonoBehaviour
     Vector2 direction = Vector2.zero;
     private InputAction move;
     private InputAction jump;
+    bool isWalking;
 
 
     // Public
@@ -18,6 +19,8 @@ public class PlayerMovements : MonoBehaviour
     public Rigidbody rb;
     public float moveSpeed = 100f;
     public float jumpHeight = 100f;
+    public float rotationSpeed = 10f; // Adjust rotation speed here
+    public Animator anim;
 
     private void Awake()
     {
@@ -28,7 +31,8 @@ public class PlayerMovements : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        anim = GetComponent<Animator>();
+        anim.Play("Walking"); // Replace "Walking" with the exact animation state name
     }
 
 
@@ -36,6 +40,9 @@ public class PlayerMovements : MonoBehaviour
     void Update()
     {
         MovePlayer();
+
+        // Animations
+        anim.SetBool("Walk", isWalking);
     }
 
     private void OnEnable()
@@ -55,9 +62,31 @@ public class PlayerMovements : MonoBehaviour
 
     void MovePlayer()
     {
-        //direction = playerControls.ReadValue<Vector2>();
+        // Get movement direction
         direction = move.ReadValue<Vector2>();
-        transform.position += new Vector3(direction.x, 0, direction.y) * moveSpeed * Time.deltaTime;
+
+        // Calculate movement
+        Vector3 movement = new Vector3(direction.x, 0, direction.y) * moveSpeed * Time.deltaTime;
+
+        // Move the player
+        transform.position += movement;
+
+        // Rotate the player to face movement direction
+        if (direction != Vector2.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.y));
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+
+            // Play walking animation
+            Debug.Log("Player is moving");
+            isWalking = true;
+        }
+        else
+        {
+            // Stop walking animation
+            Debug.Log("Player is idle");
+            isWalking= false;
+        }
     }
 
     private void Jump(InputAction.CallbackContext con)
