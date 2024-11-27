@@ -61,57 +61,9 @@ public class PlayerMovements : MonoBehaviour
 
     void MovePlayer()
     {
-        //// Get movement direction
-        //direction = move.ReadValue<Vector2>();
-
-        //// Calculate movement
-        //Vector3 movement = new Vector3(direction.x, 0, direction.y) * moveSpeed * Time.deltaTime;
-
-        //// Move the player
-        //transform.position += movement;
-
-        //// Rotate the player to face movement direction
-        //if (direction != Vector2.zero)
-        //{
-        //    Quaternion targetRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.y));
-        //    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
-
-        //    // Play walking animation
-        //    isWalking = true;
-
-        //}
-        //else
-        //{
-        //    // Stop walking animation
-        //    isWalking = false;
-        //}
+        
 
 
-
-        // Get movement direction from input (WASD or arrow keys)
-        direction = move.ReadValue<Vector2>();
-
-        // Check if there's any movement
-        if (direction != Vector2.zero)
-        {
-            // Calculate movement in world space
-            Vector3 movement = new Vector3(direction.x, 0, direction.y).normalized * moveSpeed * Time.deltaTime;
-
-            // Move the player
-            transform.position += transform.TransformDirection(movement);
-
-            // Calculate rotation to face movement direction
-            Quaternion targetRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.y));
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
-
-            // Play walking animation
-            isWalking = true;
-        }
-        else
-        {
-            // Player is idle, stop animations
-            isWalking = false;
-        }
 
 
 
